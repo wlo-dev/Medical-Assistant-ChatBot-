@@ -15,7 +15,7 @@ def load_pdf_file(data):
 
 #Slite the data into chunks
 def text_split(extracted_data):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
     texts = text_splitter.split-documents(extracted_data)
     return text_chunks
     
