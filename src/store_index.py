@@ -30,3 +30,12 @@ else:
     print(f"Index '{index_name}' already exists — skipping creation.")
 
 index = pc.Index(index_name)
+
+
+# Embed each chunk and upsert the embeddings into your Pinecone index
+docsearch = PineconeVectorStore.from_documents(
+   documents=text_chunks,
+   index_name =index_name,
+   embedding=embeddings,
+
+)
