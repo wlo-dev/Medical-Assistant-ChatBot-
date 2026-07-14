@@ -12,6 +12,4 @@ system_prompt = (
     "care immediately instead of answering from context."
     "\n\n"
     "{context}"
-  
-
 )
