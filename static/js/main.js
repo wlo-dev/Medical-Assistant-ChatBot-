@@ -13,11 +13,7 @@ function addMessage(text, role, sources = []) {
   wrapper.className = `msg msg-${role}`;
 
   const bubble = document.createElement("div");
-  if (role === "bot") {
-  bubble.innerHTML = formatAnswer(text);
-} else {
-  bubble.textContent = text;
-}
+  bubble.className = "bubble";
   bubble.textContent = text;
   wrapper.appendChild(bubble);
 
@@ -128,26 +124,4 @@ function formatAnswer(text) {
 }
 
 
-function formatAnswer(text) {
-  const escaped = text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
 
-  const lines = escaped.split("\n");
-  let html = "";
-  let inList = false;
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (trimmed.startsWith("* ") || trimmed.startsWith("- ")) {
-      if (!inList) { html += "<ul>"; inList = true; }
-      html += `<li>${trimmed.slice(2)}</li>`;
-    } else {
-      if (inList) { html += "</ul>"; inList = false; }
-      if (trimmed) html += `<p>${trimmed}</p>`;
-    }
-  }
-  if (inList) html += "</ul>";
-  return html;
-}
