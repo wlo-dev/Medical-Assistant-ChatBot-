@@ -245,20 +245,27 @@ html, body {
   font-family: var(--font-mono);
 }
 
-/* thinking indicator */
-.thinking .bubble {
+/* formatted answer content (paragraphs / bullet lists) */
+.bubble p { margin: 0 0 8px; }
+.bubble p:last-child { margin-bottom: 0; }
+.bubble ul { margin: 4px 0 8px; padding-left: 20px; }
+.bubble ul:last-child { margin-bottom: 0; }
+.bubble li { margin-bottom: 4px; }
+
+/* streaming placeholder (shown before the first token arrives) */
+.bubble.streaming {
   display: flex;
   align-items: center;
-  gap: 6px;
   padding: 14px 16px;
 }
 
-.thinking svg {
+.pulse-inline svg {
   width: 46px;
   height: 14px;
+  display: block;
 }
 
-.thinking polyline {
+.pulse-inline polyline {
   fill: none;
   stroke: var(--accent);
   stroke-width: 1.8;
@@ -367,4 +374,3 @@ html, body {
   }
   .disclaimer-strip { margin: 0 18px; }
 }
-
