@@ -13,7 +13,11 @@ function addMessage(text, role, sources = []) {
   wrapper.className = `msg msg-${role}`;
 
   const bubble = document.createElement("div");
-  bubble.className = "bubble";
+  if (role === "bot") {
+  bubble.innerHTML = formatAnswer(text);
+} else {
+  bubble.textContent = text;
+}
   bubble.textContent = text;
   wrapper.appendChild(bubble);
 
