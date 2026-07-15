@@ -10,8 +10,9 @@ already have working in your notebook: embeddings, docsearch, llm,
 prompt, question_answer_chain, rag_chain.
 """
 
+import json
 import os
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, Response
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -104,5 +105,40 @@ def chat():
         return jsonify({"error": f"Something went wrong: {exc}"}), 500
 
 
+@app.route("/api/chat/stream", methods=["POST"])
+def chat_stream():
+    data = request.get_json(force=True)
+    message = (data or {}).get("message", "").strip()
+
+    if not message:
+        return jsonify({"error": "Message cannot be empty."}), 400
+
+    def generate():
+        sources = []
+        try:
+            for chunk in rag_chain.stream({"input": message}):
+                # First chunk(s) typically contain "context" (retrieved docs)
+                if "context" in chunk:
+                    for doc in chunk["context"][:3]:
+                        src = getattr(doc, "metadata", {}).get("source")
+                        if src and src not in sources:
+                            sources.append(src)
+
+                # Subsequent chunks contain incremental "answer" text
+                if "answer" in chunk and chunk["answer"]:
+                    piece = {"type": "token", "text": chunk["answer"]}
+                    yield f"data: {json.dumps(piece)}\n\n"
+
+            done = {"type": "done", "sources": sources}
+            yield f"data: {json.dumps(done)}\n\n"
+
+        except Exception as exc:
+            app.logger.exception("Streaming chat error")
+            err = {"type": "error", "text": f"Something went wrong: {exc}"}
+            yield f"data: {json.dumps(err)}\n\n"
+
+    return Response(generate(), mimetype="text/event-stream")
+
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000, threaded=True)
