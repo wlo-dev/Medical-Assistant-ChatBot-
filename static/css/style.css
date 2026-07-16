@@ -127,6 +127,56 @@ html, body {
   outline-offset: 2px;
 }
 
+.history-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin: 22px 4px 8px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.history-item {
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 9px 10px;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.history-item:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.history-item.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.history-list::-webkit-scrollbar { width: 6px; }
+.history-list::-webkit-scrollbar-track { background: transparent; }
+.history-list::-webkit-scrollbar-thumb {
+  background: var(--surface-hover);
+  border-radius: 8px;
+}
+
 .sidebar-footer {
   margin-top: auto;
   padding-top: 20px;
@@ -211,10 +261,13 @@ html, body {
 
 .msg {
   display: flex;
-  max-width: 640px;
+  max-width: min(880px, 82%);
 }
 
-.msg-user { align-self: flex-end; }
+.msg-user {
+  align-self: flex-end;
+  max-width: min(560px, 70%);
+}
 .msg-bot { align-self: flex-start; }
 
 .bubble {
