@@ -30,6 +30,11 @@
       <span>+</span> New conversation
     </button>
 
+    <div class="history-label">Previous conversations</div>
+    <nav class="history-list" id="historyList">
+      <!-- populated by JS -->
+    </nav>
+
     <div class="sidebar-footer">
       <div class="model-tag">
         <span class="dot" aria-hidden="true"></span>
@@ -54,16 +59,7 @@
       </svg>
     </header>
 
-    <section class="messages" id="messages">
-      <div class="msg msg-bot">
-        <div class="bubble">
-          Hi, I'm MedicAsk. Ask me about a condition, symptom, or treatment
-          and I'll answer using the reference material I have access to.
-          I can't diagnose you &mdash; for anything urgent, contact a
-          healthcare provider directly.
-        </div>
-      </div>
-    </section>
+    <section class="messages" id="messages"></section>
 
     <div class="disclaimer-strip">
       For general information only. Not a substitute for professional medical advice.
