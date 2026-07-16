@@ -3,13 +3,20 @@ const input = document.getElementById("messageInput");
 const sendBtn = document.getElementById("sendBtn");
 const messages = document.getElementById("messages");
 const newChatBtn = document.getElementById("newChatBtn");
+const historyList = document.getElementById("historyList");
+
+const WELCOME_TEXT =
+  "Hi, I'm MedicAsk. Ask me about a condition, symptom, or treatment " +
+  "and I'll answer using the reference material I have access to. " +
+  "I can't diagnose you — for anything urgent, contact a healthcare " +
+  "provider directly.";
+
+let conversationId = null;
 
 function scrollToBottom() {
   messages.scrollTop = messages.scrollHeight;
 }
 
-// Lightweight formatter: turns "* item" / "- item" lines into <ul><li>,
-// and remaining lines into paragraphs. Escapes HTML first for safety.
 function formatAnswer(text) {
   const escaped = text
     .replace(/&/g, "&amp;")
@@ -61,8 +68,6 @@ function addMessage(text, role, sources = []) {
   return wrapper;
 }
 
-// Creates an empty bot bubble with the pulse indicator, returns handles
-// so we can update it live as tokens stream in.
 function addStreamingBubble() {
   const wrapper = document.createElement("div");
   wrapper.className = "msg msg-bot";
@@ -89,6 +94,69 @@ function setBusy(isBusy) {
   input.disabled = isBusy;
 }
 
+// ---------------------------------------------------------------------------
+// Conversation history sidebar
+// ---------------------------------------------------------------------------
+
+async function loadHistoryList() {
+  try {
+    const res = await fetch("/api/conversations");
+    const list = await res.json();
+    renderHistoryList(list);
+  } catch (err) {
+    // sidebar just stays empty if this fails — non-fatal
+  }
+}
+
+function renderHistoryList(list) {
+  historyList.innerHTML = "";
+  for (const convo of list) {
+    const item = document.createElement("button");
+    item.type = "button";
+    item.className = "history-item";
+    if (convo.id === conversationId) item.classList.add("active");
+    item.textContent = convo.title || "New conversation";
+    item.addEventListener("click", () => openConversation(convo.id));
+    historyList.appendChild(item);
+  }
+}
+
+async function openConversation(id) {
+  try {
+    const res = await fetch(`/api/conversations/${id}`);
+    if (!res.ok) return;
+    const convo = await res.json();
+
+    conversationId = convo.id;
+    messages.innerHTML = "";
+
+    if (convo.messages.length === 0) {
+      addMessage(WELCOME_TEXT, "bot");
+    } else {
+      for (const m of convo.messages) {
+        addMessage(m.text, m.role, m.sources || []);
+      }
+    }
+
+    await loadHistoryList();
+  } catch (err) {
+    // ignore — user can just try again
+  }
+}
+
+async function startNewConversation() {
+  const res = await fetch("/api/new", { method: "POST" });
+  const convo = await res.json();
+  conversationId = convo.id;
+  messages.innerHTML = "";
+  addMessage(WELCOME_TEXT, "bot");
+  await loadHistoryList();
+}
+
+// ---------------------------------------------------------------------------
+// Sending messages
+// ---------------------------------------------------------------------------
+
 async function sendMessage(message) {
   addMessage(message, "user");
   setBusy(true);
@@ -102,7 +170,7 @@ async function sendMessage(message) {
     const res = await fetch("/api/chat/stream", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ message, conversation_id: conversationId }),
     });
 
     if (!res.ok || !res.body) {
@@ -119,7 +187,7 @@ async function sendMessage(message) {
 
       buffer += decoder.decode(value, { stream: true });
       const parts = buffer.split("\n\n");
-      buffer = parts.pop(); // keep incomplete chunk for next read
+      buffer = parts.pop();
 
       for (const part of parts) {
         const line = part.trim();
@@ -158,6 +226,8 @@ async function sendMessage(message) {
       bubble.innerHTML = formatAnswer("I don't know based on the available information.");
     }
 
+    await loadHistoryList();
+
   } catch (err) {
     bubble.classList.remove("streaming");
     bubble.innerHTML = formatAnswer("Couldn't reach the assistant. Is the server running?");
@@ -175,20 +245,24 @@ form.addEventListener("submit", (e) => {
   sendMessage(value);
 });
 
-newChatBtn.addEventListener("click", async () => {
-  try {
-    await fetch("/api/new", { method: "POST" });
-  } catch (err) {
-    // non-fatal — worst case, old history lingers server-side
-  }
+newChatBtn.addEventListener("click", startNewConversation);
 
-  messages.innerHTML = "";
-  addMessage(
-    "Hi, I'm MedicAsk. Ask me about a condition, symptom, or treatment " +
-    "and I'll answer using the reference material I have access to. " +
-    "I can't diagnose you — for anything urgent, contact a healthcare " +
-    "provider directly.",
-    "bot"
-  );
-  input.focus();
-});
+// ---------------------------------------------------------------------------
+// Init
+// ---------------------------------------------------------------------------
+
+(async function init() {
+  try {
+    const res = await fetch("/api/conversations");
+    const list = await res.json();
+    renderHistoryList(list);
+
+    if (list.length > 0) {
+      await openConversation(list[0].id);
+      return;
+    }
+  } catch (err) {
+    // fall through to starting a fresh conversation
+  }
+  await startNewConversation();
+})();
