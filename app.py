@@ -1,14 +1,18 @@
 """
 Flask backend for the Medical Assistant Chatbot UI.
 
-This wraps your existing RAG pipeline (Pinecone + HuggingFace embeddings +
-Ollama) behind a small JSON API that the frontend calls. It keeps a single
-running conversation history in memory so follow-up questions ("what is
-the cause?") are understood in context of the previous question.
+Wraps the RAG pipeline (Pinecone + HuggingFace embeddings + Ollama) behind
+a small JSON/streaming API. Conversations are persisted as JSON files on
+disk under conversations/, so previous chats survive app restarts and can
+be revisited from the sidebar.
 """
 
 import json
 import os
+import time
+import uuid
+from pathlib import Path
+
 from flask import Flask, request, jsonify, render_template, Response
 from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage, AIMessage
@@ -17,8 +21,12 @@ load_dotenv()
 
 app = Flask(__name__)
 
+CONVERSATIONS_DIR = Path(__file__).parent / "conversations"
+CONVERSATIONS_DIR.mkdir(exist_ok=True)
+
+
 # ---------------------------------------------------------------------------
-# 1. Build the RAG chain once at startup (reuses your existing notebook code)
+# 1. Build the RAG chain once at startup
 # ---------------------------------------------------------------------------
 
 def build_rag_chain():
@@ -39,9 +47,6 @@ def build_rag_chain():
 
     llm = ChatOllama(model="llama3.2", temperature=0.4, keep_alive="30m")
 
-    # --- Step 1: rewrite follow-up questions into standalone questions ---
-    # e.g. "what is the cause?" -> "what is the cause of AIDS?"
-    # using the chat history so far.
     contextualize_prompt = ChatPromptTemplate.from_messages([
         ("system",
          "Given the chat history and the latest user question, rewrite the "
@@ -57,7 +62,6 @@ def build_rag_chain():
         llm, retriever, contextualize_prompt
     )
 
-    # --- Step 2: answer using the retrieved context ---
     system_prompt = (
         "You are a medical information assistant for question-answering tasks. "
         "Use the following pieces of retrieved context to answer "
@@ -89,13 +93,65 @@ print("Loading RAG chain... (this can take a few seconds while Ollama warms up)"
 rag_chain = build_rag_chain()
 print("RAG chain ready.")
 
-# In-memory conversation history for this single local session.
-# Cleared whenever the user clicks "New conversation".
-chat_history = []
+
+# ---------------------------------------------------------------------------
+# 2. Conversation persistence helpers
+# ---------------------------------------------------------------------------
+
+def conversation_path(conversation_id):
+    safe_id = "".join(c for c in conversation_id if c.isalnum() or c == "-")
+    return CONVERSATIONS_DIR / f"{safe_id}.json"
+
+
+def load_conversation(conversation_id):
+    path = conversation_path(conversation_id)
+    if not path.exists():
+        return None
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def save_conversation(conversation):
+    path = conversation_path(conversation["id"])
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(conversation, f, ensure_ascii=False, indent=2)
+
+
+def list_conversations():
+    items = []
+    for path in CONVERSATIONS_DIR.glob("*.json"):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            items.append({
+                "id": data["id"],
+                "title": data.get("title", "New conversation"),
+                "updated_at": data.get("updated_at", 0),
+            })
+        except (json.JSONDecodeError, KeyError):
+            continue
+    items.sort(key=lambda c: c["updated_at"], reverse=True)
+    return items
+
+
+def messages_to_chat_history(messages):
+    """Convert stored {role, text} messages into LangChain message objects."""
+    history = []
+    for m in messages:
+        if m["role"] == "user":
+            history.append(HumanMessage(content=m["text"]))
+        else:
+            history.append(AIMessage(content=m["text"]))
+    return history
+
+
+def make_title(first_message):
+    title = first_message.strip().replace("\n", " ")
+    return title[:48] + ("…" if len(title) > 48 else "")
 
 
 # ---------------------------------------------------------------------------
-# 2. Routes
+# 3. Routes
 # ---------------------------------------------------------------------------
 
 @app.route("/")
@@ -103,19 +159,53 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/api/conversations", methods=["GET"])
+def get_conversations():
+    return jsonify(list_conversations())
+
+
+@app.route("/api/conversations/<conversation_id>", methods=["GET"])
+def get_conversation(conversation_id):
+    convo = load_conversation(conversation_id)
+    if not convo:
+        return jsonify({"error": "Not found"}), 404
+    return jsonify(convo)
+
+
 @app.route("/api/new", methods=["POST"])
 def new_conversation():
-    chat_history.clear()
-    return jsonify({"ok": True})
+    conversation_id = str(uuid.uuid4())
+    convo = {
+        "id": conversation_id,
+        "title": "New conversation",
+        "updated_at": time.time(),
+        "messages": [],
+    }
+    save_conversation(convo)
+    return jsonify(convo)
 
 
 @app.route("/api/chat/stream", methods=["POST"])
 def chat_stream():
     data = request.get_json(force=True)
     message = (data or {}).get("message", "").strip()
+    conversation_id = (data or {}).get("conversation_id", "").strip()
 
     if not message:
         return jsonify({"error": "Message cannot be empty."}), 400
+    if not conversation_id:
+        return jsonify({"error": "Missing conversation_id."}), 400
+
+    convo = load_conversation(conversation_id)
+    if convo is None:
+        convo = {
+            "id": conversation_id,
+            "title": "New conversation",
+            "updated_at": time.time(),
+            "messages": [],
+        }
+
+    chat_history = messages_to_chat_history(convo["messages"])
 
     def generate():
         sources = []
@@ -136,11 +226,20 @@ def chat_stream():
                     piece = {"type": "token", "text": chunk["answer"]}
                     yield f"data: {json.dumps(piece)}\n\n"
 
-            # Save this turn to history so follow-up questions have context
-            chat_history.append(HumanMessage(content=message))
-            chat_history.append(AIMessage(content=full_answer))
+            is_first_message = len(convo["messages"]) == 0
+            convo["messages"].append({"role": "user", "text": message, "sources": []})
+            convo["messages"].append({"role": "bot", "text": full_answer, "sources": sources})
+            convo["updated_at"] = time.time()
+            if is_first_message:
+                convo["title"] = make_title(message)
+            save_conversation(convo)
 
-            done = {"type": "done", "sources": sources}
+            done = {
+                "type": "done",
+                "sources": sources,
+                "conversation_id": convo["id"],
+                "title": convo["title"],
+            }
             yield f"data: {json.dumps(done)}\n\n"
 
         except Exception as exc:
