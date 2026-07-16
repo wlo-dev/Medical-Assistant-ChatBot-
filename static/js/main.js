@@ -175,7 +175,13 @@ form.addEventListener("submit", (e) => {
   sendMessage(value);
 });
 
-newChatBtn.addEventListener("click", () => {
+newChatBtn.addEventListener("click", async () => {
+  try {
+    await fetch("/api/new", { method: "POST" });
+  } catch (err) {
+    // non-fatal — worst case, old history lingers server-side
+  }
+
   messages.innerHTML = "";
   addMessage(
     "Hi, I'm MedicAsk. Ask me about a condition, symptom, or treatment " +
