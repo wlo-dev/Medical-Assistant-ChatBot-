@@ -45,7 +45,7 @@ def build_rag_chain():
     )
     retriever = docsearch.as_retriever(search_kwargs={"k": 3})
 
-    llm = ChatOllama(model="llama3.2", temperature=0.4, keep_alive="30m", num_predict=300)
+    llm = ChatOllama(model="llama3.2:1b", temperature=0.4, keep_alive="30m", num_predict=300)
 
     contextualize_prompt = ChatPromptTemplate.from_messages([
         ("system",
