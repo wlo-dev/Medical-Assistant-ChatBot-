@@ -1,0 +1,31 @@
+{
+  "id": "cc1b2033-89b0-4b14-be55-7610dfa7ddb9",
+  "title": "what is kidney failure.",
+  "updated_at": 1784310169.3962805,
+  "messages": [
+    {
+      "role": "user",
+      "text": "what is kidney failure.",
+      "sources": []
+    },
+    {
+      "role": "bot",
+      "text": "Kidney failure, also known as chronic renal failure (CRF), is a syndrome characterized by the gradual suppression of Glomerular filtration rate (GFR) over weeks to months, leading to the accumulation of nitrogenous waste products in the body.\n\nIn simpler terms, when the kidneys are no longer able to effectively filter waste and excess fluids from the blood, it can lead to a buildup of toxins in the body. This can cause a range of symptoms, including fatigue, swelling, and difficulty maintaining proper electrolyte balance.\n\nKidney failure is often caused by multiple etiologies (causes), such as diabetes, high blood pressure, or certain medications, which can lead to irreversible loss of kidney function over time.",
+      "sources": [
+        "Data\\40mbs_medicalbooksstore_2017_essentials.pdf"
+      ]
+    },
+    {
+      "role": "user",
+      "text": "what  is the cause ?",
+      "sources": []
+    },
+    {
+      "role": "bot",
+      "text": "According to the context provided, some common causes of chronic renal failure include:\n\n• Diabetes (35-40%)\n• Hypertension (35-40%)\n• Glomerulonephritis\n• Autosomal dominant polycystic kidney disease (ADPKD)\n\nThese conditions can lead to irreversible loss of kidney function over time.",
+      "sources": [
+        "Data\\40mbs_medicalbooksstore_2017_essentials.pdf"
+      ]
+    }
+  ]
+}
