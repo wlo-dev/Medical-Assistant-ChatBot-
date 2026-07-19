@@ -1,0 +1,44 @@
+{
+  "id": "8c3234c5-b77d-494d-84c2-cb9b7e0710d2",
+  "title": "what is Hanta Virus?",
+  "updated_at": 1784480823.0894163,
+  "messages": [
+    {
+      "role": "user",
+      "text": "what is Hanta Virus?",
+      "sources": []
+    },
+    {
+      "role": "bot",
+      "text": "Here's an overview of Hantavirus based on the provided context:\n\nHantavirus is a type of enveloped RNA bunyavirus that is naturally hosted in rodents, moles, and shrews. It is transmitted to humans through contact with infected rodent urine, feces, or saliva.\n\nThere are two main clinical syndromes associated with Hantavirus infection: \n\n1. Hemorrhagic Fever with Renal Syndrome (HFRS): a mild to severe illness caused primarily by Old World hantaviruses such as Dobrava-Belgrade virus, Puumala virus, Seoul virus, and Hantaan virus.\n2. Hantavirus Pulmonary Syndrome (HPS), also known as hantavirus cardiopulmonary syndrome: a condition with a 40% mortality rate caused mainly by New World hantaviruses such as Sin Nombre virus and Andes virus.\n\nIt's worth noting that the primary reservoirs for different strains of Hantavirus include:\n\n* Field mouse (Hantaan virus)\n* Bank vole (Puumala virus)\n* Deer mouse (Sin Nombre virus-HPS)\n\nIf you have any further questions or concerns, I recommend consulting a licensed healthcare provider.",
+      "sources": [
+        "Data\\current-medical-diagnosis-and-treatment-2025-1.pdf"
+      ]
+    },
+    {
+      "role": "user",
+      "text": "what are the symptoms?",
+      "sources": []
+    },
+    {
+      "role": "bot",
+      "text": "According to the provided context, the symptoms of Hantavirus infection can vary widely and may include:\n\n**Common symptoms:**\n\n* Cough\n* Fever\n* Chills/rigor\n* Myalgias (muscle pain)\n* Pharyngitis (sore throat)\n\n**Variable but common in severe infection:**\n\n* Dyspnea (shortness of breath)\n\n**Less frequent early symptoms:**\n\n* Rhinitis\n* Pharyngitis\n* Abdominal symptoms such as:\n\t+ Nausea\n\t+ Diarrhea\n\n**Other possible symptoms:**\n\n* Headache\n* Hearing loss\n* Heart disease or failure (including acute and chronic conditions)\n* Trauma to the head or heart\n\nIt's essential to note that no single symptom should be used to diagnose Hantavirus infection. A comprehensive medical evaluation is necessary for an accurate diagnosis.\n\nIf you suspect you have been exposed to Hantavirus or are experiencing symptoms, I strongly recommend consulting a licensed healthcare provider immediately.",
+      "sources": [
+        "Data\\current-medical-diagnosis-and-treatment-2025-1.pdf",
+        "Data\\40mbs_medicalbooksstore_2017_essentials.pdf"
+      ]
+    },
+    {
+      "role": "user",
+      "text": "dose it have a cure ?",
+      "sources": []
+    },
+    {
+      "role": "bot",
+      "text": "According to the provided context, there is no established cure for Hantavirus infection. However, various treatments and interventions can help manage the symptoms and reduce the severity of the disease.\n\n**Treatment options:**\n\n1. **Supportive care:** Rest, hydration, and monitoring are essential for managing symptoms.\n2. **Vasopressors:** Medications to manage blood pressure may be necessary in severe cases of HFRS (Hemorrhagic Fever with Renal Syndrome).\n3. **Extracorporeal membrane oxygenation (ECMO):** In severe cases of HPS (Hantavirus Pulmonary Syndrome), ECMO may be required to support breathing.\n4. **Ribavirin:** Intravenous ribavirin has been used in some cases of HFRS, particularly for Hantaan virus infections, with some success in decreasing the severity of kidney injury.\n\n**Prevention:**\n\n1. **Exposure reduction:** Avoiding contact with rodents and their waste can help prevent infection.\n2. **Personal protective equipment (PPE):** Wearing masks, gloves, and other PPE when handling rodents or their waste can reduce exposure risk.\n\nIt's essential to note that the effectiveness of these treatments and interventions may vary depending on the specific strain of Hantavirus and the severity of the disease.\n\nIf you suspect you have been exposed to Hantavirus or are experiencing symptoms, I strongly recommend consulting a licensed healthcare provider for guidance and treatment.",
+      "sources": [
+        "Data\\current-medical-diagnosis-and-treatment-2025-1.pdf"
+      ]
+    }
+  ]
+}

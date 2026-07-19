@@ -17,6 +17,10 @@ function scrollToBottom() {
   messages.scrollTop = messages.scrollHeight;
 }
 
+function formatInline(line) {
+  return line.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+}
+
 function formatAnswer(text) {
   const escaped = text
     .replace(/&/g, "&amp;")
@@ -25,19 +29,33 @@ function formatAnswer(text) {
 
   const lines = escaped.split("\n");
   let html = "";
-  let inList = false;
+  let listType = null; // "ul" | "ol" | null
+
+  const closeList = () => {
+    if (listType) {
+      html += `</${listType}>`;
+      listType = null;
+    }
+  };
 
   for (const rawLine of lines) {
     const line = rawLine.trim();
-    if (line.startsWith("* ") || line.startsWith("- ")) {
-      if (!inList) { html += "<ul>"; inList = true; }
-      html += `<li>${line.slice(2)}</li>`;
+
+    const bulletMatch = line.match(/^[*-]\s+(.*)/);
+    const numberedMatch = line.match(/^\d+[.)]\s+(.*)/);
+
+    if (bulletMatch) {
+      if (listType !== "ul") { closeList(); html += "<ul>"; listType = "ul"; }
+      html += `<li>${formatInline(bulletMatch[1])}</li>`;
+    } else if (numberedMatch) {
+      if (listType !== "ol") { closeList(); html += "<ol>"; listType = "ol"; }
+      html += `<li>${formatInline(numberedMatch[1])}</li>`;
     } else {
-      if (inList) { html += "</ul>"; inList = false; }
-      if (line) html += `<p>${line}</p>`;
+      closeList();
+      if (line) html += `<p>${formatInline(line)}</p>`;
     }
   }
-  if (inList) html += "</ul>";
+  closeList();
   return html;
 }
 
@@ -69,19 +87,19 @@ function addMessage(text, role, sources = []) {
 }
 
 const THINKING_PHRASES = [
-  "Searching the reference material…",
-  "Reading the retrieved context…",
-  "Thinking through the answer…",
-  "Putting the response together…",
+  "Searching",
+  "Reading",
+  "Thinking",
+  "Composing",
 ];
 
 function addStreamingBubble() {
   const wrapper = document.createElement("div");
   wrapper.className = "msg msg-bot";
 
-  const bubble = document.createElement("div");
-  bubble.className = "bubble streaming";
-  bubble.innerHTML = `
+  const indicator = document.createElement("div");
+  indicator.className = "thinking-indicator";
+  indicator.innerHTML = `
     <span class="pulse-inline">
       <svg viewBox="0 0 46 14">
         <polyline points="0,7 12,7 16,1 20,13 24,7 46,7" />
@@ -90,18 +108,35 @@ function addStreamingBubble() {
     <span class="thinking-text">${THINKING_PHRASES[0]}</span>
   `;
 
+  // The real answer will be rendered into this bubble once tokens arrive;
+  // it starts empty and hidden so the borderless indicator shows first.
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.style.display = "none";
+
+  wrapper.appendChild(indicator);
   wrapper.appendChild(bubble);
+
   messages.appendChild(wrapper);
   scrollToBottom();
 
   let phraseIndex = 0;
-  const textEl = bubble.querySelector(".thinking-text");
+  const textEl = indicator.querySelector(".thinking-text");
   const intervalId = setInterval(() => {
     phraseIndex = (phraseIndex + 1) % THINKING_PHRASES.length;
     if (textEl) textEl.textContent = THINKING_PHRASES[phraseIndex];
-  }, 1800);
+  }, 1400);
 
-  return { wrapper, bubble, stopThinking: () => clearInterval(intervalId) };
+  return {
+    wrapper,
+    bubble,
+    indicator,
+    stopThinking: () => {
+      clearInterval(intervalId);
+      indicator.remove();
+      bubble.style.display = "";
+    },
+  };
 }
 
 function setBusy(isBusy) {
@@ -256,6 +291,7 @@ async function sendMessage(message) {
         } else if (payload.type === "done") {
           sources = payload.sources || [];
         } else if (payload.type === "error") {
+          stopThinking();
           fullText = payload.text;
           bubble.classList.remove("streaming");
           bubble.innerHTML = formatAnswer(fullText);
@@ -271,7 +307,7 @@ async function sendMessage(message) {
     }
 
     if (!fullText) {
-      bubble.classList.remove("streaming");
+      stopThinking();
       bubble.innerHTML = formatAnswer("I don't know based on the available information.");
     }
 
