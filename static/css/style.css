@@ -293,7 +293,8 @@ html, body {
 
 .msg {
   display: flex;
-  max-width: min(880px, 82%);
+  max-width: min(1200px, 92%);
+  flex-direction: column;
 }
 
 .msg-user {
@@ -330,39 +331,45 @@ html, body {
   font-family: var(--font-mono);
 }
 
-/* formatted answer content (paragraphs / bullet lists) */
+/* formatted answer content (paragraphs / bullet & numbered lists) */
 .bubble p {
   margin: 0 0 10px;
   text-align: justify;
   text-justify: inter-word;
 }
 .bubble p:last-child { margin-bottom: 0; }
-.bubble ul { margin: 4px 0 10px; padding-left: 20px; }
-.bubble ul:last-child { margin-bottom: 0; }
+.bubble ul, .bubble ol {
+  margin: 4px 0 10px;
+  padding-left: 22px;
+}
+.bubble ul:last-child, .bubble ol:last-child { margin-bottom: 0; }
 .bubble li {
-  margin-bottom: 4px;
+  margin-bottom: 5px;
   text-align: left;
 }
+.bubble strong {
+  color: var(--text);
+  font-weight: 600;
+}
 
-/* streaming placeholder (shown before the first token arrives) */
-.bubble.streaming {
+/* thinking indicator — plain icon + single word, no bubble/box */
+.thinking-indicator {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
+  gap: 9px;
+  padding: 8px 4px;
 }
 
 .pulse-inline svg {
-  width: 40px;
-  height: 14px;
+  width: 30px;
+  height: 12px;
   display: block;
   flex-shrink: 0;
 }
 
 .thinking-text {
-  font-size: 13px;
+  font-size: 13.5px;
   color: var(--text-muted);
-  font-style: italic;
 }
 
 .pulse-inline polyline {
