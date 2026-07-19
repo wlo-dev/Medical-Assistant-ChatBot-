@@ -68,6 +68,13 @@ function addMessage(text, role, sources = []) {
   return wrapper;
 }
 
+const THINKING_PHRASES = [
+  "Searching the reference material…",
+  "Reading the retrieved context…",
+  "Thinking through the answer…",
+  "Putting the response together…",
+];
+
 function addStreamingBubble() {
   const wrapper = document.createElement("div");
   wrapper.className = "msg msg-bot";
@@ -80,13 +87,21 @@ function addStreamingBubble() {
         <polyline points="0,7 12,7 16,1 20,13 24,7 46,7" />
       </svg>
     </span>
+    <span class="thinking-text">${THINKING_PHRASES[0]}</span>
   `;
 
   wrapper.appendChild(bubble);
   messages.appendChild(wrapper);
   scrollToBottom();
 
-  return { wrapper, bubble };
+  let phraseIndex = 0;
+  const textEl = bubble.querySelector(".thinking-text");
+  const intervalId = setInterval(() => {
+    phraseIndex = (phraseIndex + 1) % THINKING_PHRASES.length;
+    if (textEl) textEl.textContent = THINKING_PHRASES[phraseIndex];
+  }, 1800);
+
+  return { wrapper, bubble, stopThinking: () => clearInterval(intervalId) };
 }
 
 function setBusy(isBusy) {
@@ -111,13 +126,46 @@ async function loadHistoryList() {
 function renderHistoryList(list) {
   historyList.innerHTML = "";
   for (const convo of list) {
+    const row = document.createElement("div");
+    row.className = "history-row";
+
     const item = document.createElement("button");
     item.type = "button";
     item.className = "history-item";
     if (convo.id === conversationId) item.classList.add("active");
     item.textContent = convo.title || "New conversation";
     item.addEventListener("click", () => openConversation(convo.id));
-    historyList.appendChild(item);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "history-delete";
+    deleteBtn.setAttribute("aria-label", "Delete conversation");
+    deleteBtn.innerHTML = "&times;";
+    deleteBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      deleteConversation(convo.id);
+    });
+
+    row.appendChild(item);
+    row.appendChild(deleteBtn);
+    historyList.appendChild(row);
+  }
+}
+
+async function deleteConversation(id) {
+  const confirmed = window.confirm("Delete this conversation? This can't be undone.");
+  if (!confirmed) return;
+
+  try {
+    await fetch(`/api/conversations/${id}`, { method: "DELETE" });
+  } catch (err) {
+    // continue regardless — refresh list either way
+  }
+
+  if (id === conversationId) {
+    await startNewConversation();
+  } else {
+    await loadHistoryList();
   }
 }
 
@@ -161,7 +209,7 @@ async function sendMessage(message) {
   addMessage(message, "user");
   setBusy(true);
 
-  const { wrapper, bubble } = addStreamingBubble();
+  const { wrapper, bubble, stopThinking } = addStreamingBubble();
   let fullText = "";
   let sources = [];
   let firstToken = true;
@@ -197,6 +245,7 @@ async function sendMessage(message) {
 
         if (payload.type === "token") {
           if (firstToken) {
+            stopThinking();
             bubble.classList.remove("streaming");
             bubble.innerHTML = "";
             firstToken = false;
@@ -229,9 +278,11 @@ async function sendMessage(message) {
     await loadHistoryList();
 
   } catch (err) {
+    stopThinking();
     bubble.classList.remove("streaming");
     bubble.innerHTML = formatAnswer("Couldn't reach the assistant. Is the server running?");
   } finally {
+    stopThinking();
     setBusy(false);
     input.focus();
   }
