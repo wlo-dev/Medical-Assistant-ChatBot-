@@ -144,7 +144,15 @@ html, body {
   min-height: 0;
 }
 
+.history-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
 .history-item {
+  flex: 1;
+  min-width: 0;
   text-align: left;
   background: transparent;
   border: none;
@@ -168,6 +176,30 @@ html, body {
 .history-item.active {
   background: var(--accent-soft);
   color: var(--accent);
+}
+
+.history-delete {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 6px;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.history-row:hover .history-delete {
+  opacity: 1;
+}
+
+.history-delete:hover {
+  background: var(--warning-soft);
+  color: var(--warning);
 }
 
 .history-list::-webkit-scrollbar { width: 6px; }
@@ -316,13 +348,21 @@ html, body {
 .bubble.streaming {
   display: flex;
   align-items: center;
+  gap: 12px;
   padding: 14px 16px;
 }
 
 .pulse-inline svg {
-  width: 46px;
+  width: 40px;
   height: 14px;
   display: block;
+  flex-shrink: 0;
+}
+
+.thinking-text {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-style: italic;
 }
 
 .pulse-inline polyline {
@@ -434,4 +474,3 @@ html, body {
   }
   .disclaimer-strip { margin: 0 18px; }
 }
-
