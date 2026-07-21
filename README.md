@@ -2,7 +2,7 @@
   <img src="assets/banner.png" alt="MedicAsk Banner" width="100%">
 </p>
 
-<h1 align="center">🩺 MedicAsk</h1>
+<h1 align="center"> MedicAsk</h1>
 
 <p align="center">
   <strong>An AI-powered Retrieval-Augmented Generation (RAG) medical assistant built with LangChain, Pinecone, Ollama, and Flask.</strong>
