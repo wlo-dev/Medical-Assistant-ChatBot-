@@ -28,12 +28,4 @@
 
 ## 📖 Overview
 
-MedicAsk is a Retrieval-Augmented Generation (RAG) chatbot that answers medical questions using information retrieved from an indexed medical reference document instead of relying solely on an LLM's general knowledge.
-
-When a user asks a question, MedicAsk searches a curated medical knowledge base for the most relevant information before generating a response. Every answer is grounded in the retrieved context and includes a source citation, making responses more transparent and reliable.
-
-The application features a responsive web interface built with Flask, HTML, CSS, and JavaScript. Users can upload documents, ask questions, and receive streamed responses with source citations in real time. Follow-up questions are understood through conversation-aware retrieval, allowing interactions to feel more natural while keeping responses grounded in the indexed reference material.
-
-To keep the project private and cost-effective, language generation runs locally using **Llama 3.2 through Ollama**, while document embeddings are generated locally using **all-MiniLM-L6-v2**. Pinecone is used only for storing vector embeddings of the indexed reference document.
-
-This project was built to explore modern Retrieval-Augmented Generation architectures, semantic search, vector databases, and local large language model deployment while gaining practical experience with AI engineering concepts.
+MedicAsk is a Retrieval-Augmented Generation (RAG) AI assistant designed to answer medical questions using an indexed medical reference document. By combining semantic search with a locally running large language model, it generates context-aware responses that are grounded in the retrieved source material and accompanied by citations.
