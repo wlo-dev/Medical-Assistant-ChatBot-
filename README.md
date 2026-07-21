@@ -13,9 +13,14 @@
 </p>
 
 <p align="center">
+ <p align="center">
   <img src="https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python">
   <img src="https://img.shields.io/badge/Flask-Backend-black?style=for-the-badge&logo=flask">
+  <img src="https://img.shields.io/badge/HTML5-Markup-E34F26?style=for-the-badge&logo=html5&logoColor=white">
+  <img src="https://img.shields.io/badge/CSS3-Styling-1572B6?style=for-the-badge&logo=css3&logoColor=white">
+  <img src="https://img.shields.io/badge/JavaScript-Frontend-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
   <img src="https://img.shields.io/badge/LangChain-RAG-green?style=for-the-badge">
   <img src="https://img.shields.io/badge/Ollama-Llama_3.2-grey?style=for-the-badge">
   <img src="https://img.shields.io/badge/Pinecone-Vector_DB-00C7B7?style=for-the-badge">
+</p>
 </p>
