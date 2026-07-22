@@ -1,5 +1,7 @@
 <p align="center">
- <img src="assets/banner.png" alt="mediask.png" width="100%">
+
+  <img src="mediask.png" alt="MedicAsk Banner" width="100%">
+</p>
 </p>
 
 <h1 align="center"> MedicAsk</h1>
