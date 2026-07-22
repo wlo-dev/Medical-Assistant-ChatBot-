@@ -1,0 +1,20 @@
+{
+  "id": "442bc3be-1b04-4e3b-bb5f-4737257765b2",
+  "title": "what is hantavirus? please explain what it is, h…",
+  "updated_at": 1784641061.0124657,
+  "messages": [
+    {
+      "role": "user",
+      "text": "what is hantavirus? please explain what it is, how it spreads and its symptoms.",
+      "sources": []
+    },
+    {
+      "role": "bot",
+      "text": "**What is Hantavirus?**\n\nHantavirus is a type of virus that belongs to the Bunyaviridae family of viruses. It is an enveloped RNA virus that naturally hosts rodents, moles, and shrews as its primary carriers.\n\n**How does it spread?**\n\nHantavirus spreads through contact with infected rodent urine, feces, or saliva, typically through:\n\n* Direct contact with contaminated materials (e.g., soil, water, or food)\n* Inhalation of aerosolized virus particles\n* Contact with infected rodents or their droppings\n\n**Symptoms of Hantavirus Infection**\n\nHantavirus infection can cause two clinical syndromes: Hemorrhagic Fever with Renal Syndrome (HFRS) and Hantavirus Pulmonary Syndrome (HPS).\n\nThe symptoms of HFRS typically include:\n\n* Mild to severe fever\n* Headache\n* Muscle pain\n* Back pain\n* Abdominal pain\n* Nausea and vomiting\n* Diarrhea or constipation\n* Hemorrhaging (bleeding) in the lungs, kidneys, or other organs\n\nThe symptoms of HPS typically include:\n\n* Severe respiratory distress\n* High fever\n* Chest pain\n* Coughing up blood or rust-colored sputum\n* Shortness of breath\n* Fatigue and weakness\n* In severe cases, mortality rate can be as high as 40%\n\nIt's essential to note that Hantavirus infection is usually self-limiting, meaning it will resolve on its own without treatment. However, prompt medical attention is necessary to prevent complications and ensure proper management of symptoms.\n\n**Prevention**\n\nTo minimize the risk of hantavirus infection:\n\n* Avoid contact with rodents or their droppings\n* Wear protective gear (e.g., gloves, masks) when handling potentially contaminated materials\n* Keep homes clean and tidy, including regular cleaning and disinfection of rodent-infested areas\n* Avoid eating undercooked or raw meat from wild game animals\n\nIf you suspect you have been exposed to hantavirus or are experiencing symptoms, consult a licensed healthcare provider for proper evaluation and treatment.",
+      "sources": [
+        "Data\\current-medical-diagnosis-and-treatment-2025-1.pdf",
+        "Data\\40mbs_medicalbooksstore_2017_essentials.pdf"
+      ]
+    }
+  ]
+}

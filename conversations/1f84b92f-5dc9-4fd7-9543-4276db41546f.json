@@ -1,0 +1,32 @@
+{
+  "id": "1f84b92f-5dc9-4fd7-9543-4276db41546f",
+  "title": "what is malaria?",
+  "updated_at": 1784641271.415567,
+  "messages": [
+    {
+      "role": "user",
+      "text": "what is malaria?",
+      "sources": []
+    },
+    {
+      "role": "bot",
+      "text": "Malaria is a protozoan disease caused by four species of the genus 'Plasmodium' (P. falciparum, P. vivax, P. ovale, and P. malariae) transmitted to humans through the bite of an infected female Anopheles mosquito.",
+      "sources": [
+        "Data\\40mbs_medicalbooksstore_2017_essentials.pdf",
+        "Data\\current-medical-diagnosis-and-treatment-2025-1.pdf"
+      ]
+    },
+    {
+      "role": "user",
+      "text": "what are the symptoms and how is it treated?",
+      "sources": []
+    },
+    {
+      "role": "bot",
+      "text": "**Symptoms:**\n\n* Fever\n* Chills\n* Flu-like symptoms\n* Headache\n* Fatigue\n* Nausea and vomiting\n* Diarrhea (in some cases)\n* In severe cases, seizures, coma, and death can occur.\n\n**Treatment:**\n\nIntravenous artesunate is considered the standard of care for severe malaria. It is also effective in treating uncomplicated malaria. Parenteral quinine and quinidine are acceptable alternatives. Artemether administered rectally is another option when parenteral therapy is not available.\n\nIt's worth noting that:\n\n* Treatment is most effective when started early, often within 24-48 hours of symptom onset.\n* In severe cases, treatment may require hospitalization and close monitoring.\n* Effective treatment can significantly reduce mortality rates from malaria.",
+      "sources": [
+        "Data\\current-medical-diagnosis-and-treatment-2025-1.pdf"
+      ]
+    }
+  ]
+}
