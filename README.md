@@ -1,5 +1,9 @@
+<h1 align="center"> MedicAsk A Private RAG Assistant You Run Yourself </h1>
+
+
 <p align="center">
-  <img src="assets/banner.png" alt="MedicAsk Banner" width="100%">
+  <img src="mediask.png" alt="MedicAsk Banner" width="100%">
+</p>
 </p>
 
 <h1 align="center"> MedicAsk</h1>
@@ -26,7 +30,7 @@
 </p>
 
 
-## 📖 Overview
+##  Overview
 
 MedicAsk is a retrieval-augmented generation (RAG) chatbot that answers medical questions grounded in a curated reference document, using a fully local inference pipeline  no external API calls, no per-query cost, and no data leaving the machine it runs on.
 
