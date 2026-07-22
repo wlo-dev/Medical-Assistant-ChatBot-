@@ -28,6 +28,6 @@
 
 ## 📖 Overview
 
-MedicAsk is a retrieval-augmented generation (RAG) chatbot that answers medical questions grounded in a curated reference document, using a fully local inference pipeline — no external API calls, no per-query cost, and no data leaving the machine it runs on.
+MedicAsk is a retrieval-augmented generation (RAG) chatbot that answers medical questions grounded in a curated reference document, using a fully local inference pipeline  no external API calls, no per-query cost, and no data leaving the machine it runs on.
 
 Ask a question, get an answer sourced from an indexed medical reference PDF, with follow-up questions understood in context (e.g. "what is Hanta-Virus?" → "what is the cause?" is correctly understood as still being about Hanta-Virus).
