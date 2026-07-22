@@ -1,4 +1,4 @@
-<h1 align="center"> MedicAsk </h1>
+<h1 align="center"> MedicAsk A Private RAG Assistant You Run Yourself </h1>
 
 
 <p align="center">
