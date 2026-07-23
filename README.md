@@ -36,11 +36,23 @@ MedicAsk is a retrieval-augmented generation (RAG) chatbot that answers medical 
 
 Ask a question, get an answer sourced from an indexed medical reference PDF, with follow-up questions understood in context (e.g. "what is Hanta-Virus?" → "what is the cause?" is correctly understood as still being about Hanta-Virus).
 
+----
 
 
+
+
+
+
+
+<p align = "center">
+  
 ### Video Walkthrough
 
-https://github.com/user-attachments/assets/your-video-id-here
+https://1drv.ms/u/c/726f4b95e54d4da2/IQCczC6P2tFGSJWo9FoFxNwoARbmCmTd9QSbaOY5xd5vWl0?e=FmRYib
+</p>
+
+
+
 
 ### Application Screenshots
 
