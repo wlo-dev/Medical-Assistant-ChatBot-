@@ -298,6 +298,13 @@ http://127.0.0.1:5000
 
 ---
 
+
+
+
+https://github.com/user-attachments/assets/e01869d9-c47c-4e7a-b427-83c7717cf1a2
+
+
+
 # 7. Technology Stack
 
 | Component | Technology | Purpose |
