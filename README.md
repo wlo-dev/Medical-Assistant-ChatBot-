@@ -51,8 +51,12 @@ https://github.com/user-attachments/assets/your-video-id-here
 | <img src="screenshots/screenshot%203.png" alt="Screenshot 3" width="100%"> | <img src="screenshots/screenshot%204.png" alt="Screenshot 4" width="100%"> |
 | **Persistent conversation history** | **History-aware follow-up questions** |
 
+---
+#  System Architecture
 
-
+<p align="center">
+    <img src="screenshots/system pipline architecture.png" width="100%">
+</p>
 
 ---
 
