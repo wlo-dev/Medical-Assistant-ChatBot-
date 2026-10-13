@@ -31,7 +31,7 @@ def build_rag_chain():
     from langchain_pinecone import PineconeVectorStore
     from langchain_ollama import ChatOllama
     from langchain.chains import create_retrieval_chain, create_history_aware_retriever
-    from langchain_classic.chains.combine_documents import create_stuff_documents_chain
+    from langchain.chains.combine_documents import create_stuff_documents_chain
     from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
