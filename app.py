@@ -25,9 +25,6 @@ CONVERSATIONS_DIR = Path(__file__).parent / "conversations"
 CONVERSATIONS_DIR.mkdir(exist_ok=True)
 
 
-# ---------------------------------------------------------------------------
-# 1. Build the RAG chain once at startup
-# ---------------------------------------------------------------------------
 
 def build_rag_chain():
     from langchain_huggingface import HuggingFaceEmbeddings
